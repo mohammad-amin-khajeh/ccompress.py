@@ -53,6 +53,16 @@ parser.add_argument(
 
 
 parser.add_argument(
+    "-e",
+    "--extension",
+    metavar="",
+    help="specify the format to use for conversion, defaults to webp",
+    type=str,
+    default="webp",
+)
+
+
+parser.add_argument(
     "-f",
     "--filter",
     metavar="",
@@ -126,7 +136,7 @@ def compress(raw_dir: str) -> None:
         image_extension = image.split(".")[-1]
         output_image = image.removesuffix(image_extension)
         call(
-            f"convert '{image}' -filter '{args.filter}' -resize '{args.resize}' -quality '{args.quality}' '../compressed/{output_image}webp'",
+            f"convert '{image}' -filter '{args.filter}' -resize '{args.resize}' -quality '{args.quality}' '../compressed/{output_image}{args.extension}'",
             shell=True,
         )
         if args.verbose:
@@ -139,7 +149,7 @@ def compress(raw_dir: str) -> None:
 
 def package(output_name: str, compressed_dir: str) -> None:
     chdir(compressed_dir)
-    images = glob("*.webp")
+    images = glob(f"*.{args.extension}")
     with ZipFile(output_name, "w", ZIP_DEFLATED, compresslevel=1) as zip_file:
         for image in images:
             zip_file.write(image)
