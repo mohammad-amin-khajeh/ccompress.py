@@ -1,5 +1,6 @@
 # ccompress
 a tool for compressing manga and comics on the fly.
+
 just provide the manga/comic(ending in .cbz/.cbr/.zip) as a parameter and the script will do the rest.
 the script has some additional flags to tailor the compression to one's heart's content.
 
