@@ -48,7 +48,7 @@ parser.add_argument(
     metavar="",
     help="specify the value for the -resize flag of imagemagick, defaults to 70",
     type=str,
-    default="40%",
+    default="60%",
 )
 
 
