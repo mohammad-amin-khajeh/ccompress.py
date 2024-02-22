@@ -13,3 +13,4 @@ the script has some additional flags to tailor the compression to one's heart's 
 # dependencies
 - imagemagick
 - pynotify2(optional, for notifications when conversion is completed)
+- unzip
