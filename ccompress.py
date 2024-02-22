@@ -36,9 +36,9 @@ parser.add_argument(
     "-q",
     "--quality",
     metavar="",
-    help="specify the value for the -quality flag of imagemagick, defaults to 40",
+    help="specify the value for the -quality flag of imagemagick, defaults to 50",
     type=str,
-    default="40",
+    default="50",
 )
 
 
