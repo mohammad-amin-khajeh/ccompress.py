@@ -150,7 +150,7 @@ def compress(raw_dir: str) -> None:
 def package(output_name: str, compressed_dir: str) -> None:
     chdir(compressed_dir)
     images = glob(f"*.{args.extension}")
-    with ZipFile(output_name, "w", ZIP_DEFLATED, compresslevel=1) as zip_file:
+    with ZipFile(output_name, "w", ZIP_DEFLATED) as zip_file:
         for image in images:
             zip_file.write(image)
     move(output_name, args.output)
