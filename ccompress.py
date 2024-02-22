@@ -5,7 +5,7 @@ from subprocess import call
 from shutil import move, rmtree
 from glob import glob
 import argparse
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
 
 try:
     import notify2
@@ -124,9 +124,18 @@ def requirements(temp_dir: str, raw_dir: str, compressed_dir: str) -> None:
         makedirs(compressed_dir, exist_ok=True)
 
 
-def unzip(comic: str, raw_dir: str) -> None:
-    with ZipFile(comic, "r") as original_comic:
-        original_comic.extractall(raw_dir)
+def unzip(comic: str, raw_dir: str) -> bool:
+    try:
+        with ZipFile(comic, "r") as original_comic:
+            original_comic.extractall(raw_dir)
+            return True
+    except BadZipFile:
+        try:
+            call(f"unzip '{comic}' -d '{raw_dir}' ")
+            return True
+        except:
+            print("could not convert the comic.")
+            return False
 
 
 def compress(raw_dir: str) -> None:
@@ -181,7 +190,9 @@ def main():
             print("file already exists! aborting.")
             continue
         requirements(temp_dir, raw_dir, compressed_dir)
-        unzip(comic, raw_dir)
+        unzipped = unzip(comic, raw_dir)
+        if not unzipped:
+            continue
         compress(raw_dir)
         package(comic_file, compressed_dir)
         cleanup(temp_dir)
