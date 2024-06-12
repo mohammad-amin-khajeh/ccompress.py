@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from os import getenv, makedirs, path, chdir
-from subprocess import call
-from shutil import move, rmtree
-from glob import glob
 import argparse
+from glob import glob
+from os import chdir, getenv, makedirs, path
+from shutil import move, rmtree
+from subprocess import call
 from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
 
 try:
