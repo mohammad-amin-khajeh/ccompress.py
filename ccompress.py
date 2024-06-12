@@ -7,12 +7,6 @@ from shutil import move, rmtree
 from subprocess import call
 from zipfile import ZIP_DEFLATED, BadZipFile, ZipFile
 
-try:
-    import notify2
-except ModuleNotFoundError:
-    pass
-else:
-    notify_me = True
 
 HOME = getenv("HOME")
 
@@ -101,6 +95,15 @@ group.add_argument(
 args = parser.parse_args()
 
 
+def notify2_exists_or_not() -> bool:
+    try:
+        import notify2
+    except ModuleNotFoundError:
+        return False
+    else:
+        return True
+
+
 def ok(comic: str) -> bool:
     correct_formats = (".cbz", ".cbr", ".zip")
     if not comic.endswith(correct_formats):
@@ -169,8 +172,8 @@ def cleanup(comic_temp_dir: str) -> None:
     rmtree(comic_temp_dir)
 
 
-def notify(comic_name: str) -> None:
-    if notify_me:
+def notify(comic_name: str, notify2_exists: bool) -> None:
+    if notify2_exists:
         notify2.init("ccompress")
         notification = notify2.Notification(
             "completed!", f"{comic_name} has been converted successfully."
@@ -179,6 +182,7 @@ def notify(comic_name: str) -> None:
 
 
 def main():
+    notify2_possible_import = notify2_exists_or_not()
     for comic in args.input:
         comic_file = str(comic).split("/")[-1]
         temp_dir = f"/tmp/comic/{comic_file}"
@@ -196,7 +200,7 @@ def main():
         compress(raw_dir)
         package(comic_file, compressed_dir)
         cleanup(temp_dir)
-        notify(comic_file)
+        notify(comic_file, notify2_possible_import)
 
 
 if __name__ == "__main__":
